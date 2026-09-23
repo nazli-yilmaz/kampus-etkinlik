@@ -19,4 +19,4 @@ Bu sprintte CSS ve JavaScript kullanılmamıştır.
 
 ## Canlı Adres
 
-Vercel bağlantısı buraya eklenecek.
+https://kampus-etkinlik-seven.vercel.app
