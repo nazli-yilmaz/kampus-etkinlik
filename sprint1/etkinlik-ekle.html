@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Etkinlik Ekle</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Kampüs Etkinlikleri</h1>
+
+        <nav>
+            <a href="index.html">Ana Sayfa</a>
+            <a href="etkinlikler.html">Etkinlikler</a>
+            <a href="etkinlik-detay.html">Detay</a>
+            <a href="etkinlik-ekle.html">Etkinlik Ekle</a>
+            <a href="etkinlik-guncelle.html">Güncelle</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <h2>Etkinlik Ekle</h2>
+
+        <form>
+
+            <label for="etkinlik-adi">Etkinlik Adı</label>
+            <input type="text" id="etkinlik-adi" required>
+
+            <br><br>
+
+            <label for="kategori">Kategori</label>
+            <select id="kategori" required>
+                <option value="">Seçiniz</option>
+                <option value="seminer">Seminer</option>
+                <option value="atolye">Atölye</option>
+                <option value="konferans">Konferans</option>
+            </select>
+
+            <br><br>
+
+            <label for="tarih">Tarih</label>
+            <input type="date" id="tarih" required>
+
+            <br><br>
+
+            <label for="saat">Saat</label>
+            <input type="time" id="saat" required>
+
+            <br><br>
+
+            <label for="yer">Yer</label>
+            <input type="text" id="yer" required>
+
+            <br><br>
+
+            <label for="aciklama">Açıklama</label>
+            <textarea id="aciklama" required></textarea>
+
+            <br><br>
+
+            <button type="submit">Gönder</button>
+
+        </form>
+
+    </main>
+
+    <footer>
+        <p>Ad Soyad · 20xxxxxxx · 2026</p>
+    </footer>
+
+</body>
+
+</html>
