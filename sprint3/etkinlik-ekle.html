@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etkinlik Ekle</title>
+
+    <link rel="stylesheet" href="css/2311012070.css">
+    <script type="module" src="js/event-form.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>Kampüs Etkinlikleri</h1>
+
+        <nav>
+            <a href="index.html">Ana Sayfa</a>
+            <a href="etkinlikler.html">Etkinlikler</a>
+            <a href="etkinlik-ekle.html">Etkinlik Ekle</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <h2>Etkinlik Ekle</h2>
+
+        <form id="etkinlik-formu" novalidate>
+
+            <div class="form-alani">
+                <label for="etkinlik-adi">Etkinlik Adı</label>
+                <input type="text" id="etkinlik-adi" name="ad">
+                <span id="ad-hata" class="form-hata"></span>
+            </div>
+
+            <div class="form-alani">
+                <label for="kategori">Kategori</label>
+                <select id="kategori" name="kategori">
+                    <option value="">Seçiniz</option>
+                    <option value="Seminer">Seminer</option>
+                    <option value="Atölye">Atölye</option>
+                    <option value="Konferans">Konferans</option>
+                </select>
+                <span id="kategori-hata" class="form-hata"></span>
+            </div>
+
+            <div class="form-alani">
+                <label for="tarih">Tarih</label>
+                <input type="date" id="tarih" name="tarih">
+                <span id="tarih-hata" class="form-hata"></span>
+            </div>
+
+            <div class="form-alani">
+                <label for="saat">Saat</label>
+                <input type="time" id="saat" name="saat">
+                <span id="saat-hata" class="form-hata"></span>
+            </div>
+
+            <div class="form-alani">
+                <label for="yer">Yer</label>
+                <input type="text" id="yer" name="yer">
+                <span id="yer-hata" class="form-hata"></span>
+            </div>
+
+            <div class="form-alani">
+                <label for="aciklama">Açıklama</label>
+                <textarea id="aciklama" name="aciklama"></textarea>
+            </div>
+
+            <div class="form-alani">
+                <label for="kontenjan">Kontenjan</label>
+                <input type="number" id="kontenjan" name="kontenjan">
+                <span id="kontenjan-hata" class="form-hata"></span>
+            </div>
+
+            <button type="submit">Kaydet</button>
+
+            <div id="form-mesaj"></div>
+
+        </form>
+
+    </main>
+
+    <footer>
+        <p>Nazlı Yılmaz · 2311012070 · 2026</p>
+    </footer>
+
+</body>
+
+</html>

@@ -1,3 +1,5 @@
+https://kampus-etkinlik-seven.vercel.app/
+
 # Kampüs Etkinlikleri
 
 Sprint 1 kapsamında yalnızca HTML kullanılarak hazırlanmış
