@@ -36,9 +36,19 @@ function render(dizi) {
 
 if (list.dataset.limit) {
 
-    const yaklasan = [...events]
-        .sort((a, b) => a.date.localeCompare(b.date))
-        .slice(0, Number(list.dataset.limit));
+   const yaklasan = [...events]
+    .sort((a, b) => {
+        const tarihA = new Date(
+            a.date.split("-").reverse().join("-")
+        );
+
+        const tarihB = new Date(
+            b.date.split("-").reverse().join("-")
+        );
+
+        return tarihA - tarihB;
+    })
+    .slice(0, Number(list.dataset.limit));
 
     render(yaklasan);
 
