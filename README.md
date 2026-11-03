@@ -1,24 +1,19 @@
-https://kampus-etkinlik-seven.vercel.app/
-
 # Kampüs Etkinlikleri
 
-Sprint 1 kapsamında yalnızca HTML kullanılarak hazırlanmış
-kampüs etkinlikleri uygulamasının temel iskeletidir.
-
-## Sayfalar
-
-- Ana Sayfa
-- Etkinlikler
-- Etkinlik Detay
-- Etkinlik Ekle
-- Etkinlik Güncelle
+Üniversite öğrencilerinin kampüs etkinliklerini görüntüleyebildiği, arayabildiği ve etkinlikler hakkında detaylı bilgi alabildiği React tabanlı web uygulaması.
 
 ## Kullanılan Teknolojiler
 
-- HTML
+- React
+- TypeScript
+- Vite
+- React Router
+- Context API
+- CSS
 
-Bu sprintte CSS ve JavaScript kullanılmamıştır.
+## Kurulum
 
-## Canlı Adres
-
-https://kampus-etkinlik-seven.vercel.app
+```bash
+cd frontend
+npm install
+npm run dev
