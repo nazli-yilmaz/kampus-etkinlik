@@ -66,7 +66,7 @@ npm run build
 
 ## Canlı Uygulama
 
-[https://kampus-etkinlik-seven.vercel.app/](https://kampus-etkinlik-seven.vercel.app/)
+[https://nazliyilmaz-frontend.vercel.app/](https://nazliyilmaz-frontend.vercel.app/)
 
 ## GitHub
 
