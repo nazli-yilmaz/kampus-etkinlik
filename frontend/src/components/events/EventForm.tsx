@@ -1,8 +1,7 @@
 
 import { useState } from "react";
 import type { FormEvent } from "react";
-import type { CampusEvent, Category } from "../types/campus-event";
-
+import type { CampusEvent, Category } from "../../types/campus-event";
 type EventFormData = Omit<CampusEvent, "id">;
 
 interface EventFormProps {

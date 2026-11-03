@@ -1,5 +1,5 @@
 
-import type { CampusEvent } from "../types/campus-event";
+import type { CampusEvent } from "../../types/campus-event";
 import EventCard from "./EventCard";
 
 interface EventListProps {

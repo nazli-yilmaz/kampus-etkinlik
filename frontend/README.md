@@ -1,75 +1,74 @@
-# React + TypeScript + Vite
+# Kampüs Etkinlikleri
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Üniversite öğrencilerinin kampüs etkinliklerini görüntüleyebildiği, arayabildiği ve etkinlikler hakkında detaylı bilgi alabildiği React tabanlı web uygulaması.
 
-Currently, two official plugins are available:
+## Kullanılan Teknolojiler
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React
+- TypeScript
+- Vite
+- React Router
+- Context API
+- CSS
 
-## React Compiler
+## Kurulum
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Projeyi bilgisayarınıza indirdikten sonra frontend klasörüne girin:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+cd frontend
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Gerekli paketleri yükleyin:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
 ```
+
+Projeyi geliştirme modunda başlatın:
+
+```bash
+npm run dev
+```
+
+Üretim sürümünü oluşturmak için:
+
+```bash
+npm run build
+```
+
+## Sayfalar ve Rotalar
+
+| Sayfa | Rota |
+|---|---|
+| Ana Sayfa | `/` |
+| Etkinlikler | `/etkinlikler` |
+| Etkinlik Detayı | `/etkinlik/:id` |
+| Yönetim Paneli | `/admin` |
+| Etkinlik Ekle | `/etkinlik-ekle` |
+| Etkinlik Düzenle | `/etkinlik-duzenle/:id` |
+| Giriş Yap | `/giris` |
+| Kayıt Ol | `/kayit` |
+| Şifremi Unuttum | `/sifremi-unuttum` |
+| Bulunamadı | `*` |
+
+## Özellikler
+
+- Etkinlikleri listeleme ve detaylarını görüntüleme
+- Yeni etkinlik ekleme
+- Etkinlikleri düzenleme ve silme
+- Silme işlemi öncesinde onay isteme
+- Etkinlikleri arama
+- Kategoriye göre filtreleme
+- Form doğrulama
+- Context API ile merkezi etkinlik yönetimi
+- Mobil uyumlu arayüz
+
+## Canlı Uygulama
+
+[https://kampus-etkinlik-seven.vercel.app/](https://kampus-etkinlik-seven.vercel.app/)
+
+## GitHub
+
+[https://github.com/nazli-yilmaz/kampus-etkinlik](https://github.com/nazli-yilmaz/kampus-etkinlik)
+

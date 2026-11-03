@@ -1,5 +1,5 @@
 
-import type { Category } from "../types/campus-event";
+import type { Category } from "../../types/campus-event";
 
 interface EventFilterProps {
   searchText: string;

@@ -1,6 +1,6 @@
+import type { CampusEvent } from "../../types/campus-event";
+import { formatDate } from "../../utils/format-date";
 
-import type { CampusEvent } from "../types/campus-event";
-import { formatDate } from "../utils/format-date";
 
 interface EventCardProps {
   event: CampusEvent;
