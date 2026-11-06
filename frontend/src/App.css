@@ -255,9 +255,18 @@ textarea[aria-invalid="true"] {
   -webkit-overflow-scrolling: touch;
 }
 
+
+
+/* Yönetim tablosu - masaüstü */
+.admin-table-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .admin-table-container table {
   width: 100%;
-  min-width: 650px;
   border-collapse: collapse;
 }
 
@@ -265,12 +274,74 @@ textarea[aria-invalid="true"] {
 .admin-table-container td {
   padding: 10px;
   text-align: left;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  vertical-align: middle;
 }
 
+/* Mobil kartlar masaüstünde gizli */
+.admin-mobile-list {
+  display: none;
+}
+
+/* Mobil görünüm */
 @media (max-width: 600px) {
   .admin-table-container {
+    display: none;
+  }
+
+  .admin-mobile-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .admin-mobile-card {
+    min-width: 0;
+    padding: 16px;
+    background: white;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  }
+
+  .admin-mobile-card h3 {
+    margin: 0 0 12px;
+    overflow-wrap: anywhere;
+    color: #333;
+  }
+
+  .admin-mobile-card p {
+    margin: 8px 0;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-mobile-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .admin-mobile-actions a,
+  .admin-mobile-actions button {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    box-sizing: border-box;
+  }
+
+  .admin-mobile-actions a {
+    background: #1f6f5b;
+    color: white;
+  }
+
+  .admin-mobile-actions button {
+    background: #a51f3b;
+    color: white;
   }
 }
