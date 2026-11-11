@@ -1,0 +1,76 @@
+
+{
+  "info": {
+    "name": "Kampüs API",
+    "description": "Sprint 7 - Express REST API istek koleksiyonu",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/health"
+      }
+    },
+    {
+      "name": "Get All Events",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/events"
+      }
+    },
+    {
+      "name": "Get Event By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/events/event-2"
+      }
+    },
+    {
+      "name": "Get Non-Existing Event",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/events/yok"
+      }
+    },
+    {
+      "name": "Create Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Yeni Etkinlik\",\n  \"category\": \"Atölye\",\n  \"date\": \"2026-11-20\",\n  \"capacity\": 25,\n  \"time\": \"14:00\",\n  \"location\": \"Lab 1\",\n  \"description\": \"Test etkinliği\"\n}"
+        },
+        "url": "http://localhost:3000/events"
+      }
+    },
+    {
+      "name": "Create Event - Missing Data",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Eksik Veri Testi\"\n}"
+        },
+        "url": "http://localhost:3000/events"
+      }
+    }
+  ]
+}
