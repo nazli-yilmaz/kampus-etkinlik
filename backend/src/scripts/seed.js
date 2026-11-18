@@ -1,6 +1,6 @@
 import "dotenv/config";
 import mongoose from "mongoose";
-import { connectDB } from "../config/db.js";
+import { connectDB } from "../config/database.js";
 import Event from "../models/Event.js";
 import { events } from "../data/events.js";
 
