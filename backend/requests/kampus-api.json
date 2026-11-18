@@ -1,10 +1,15 @@
-
 {
   "info": {
     "name": "Kampüs API",
-    "description": "Sprint 7 - Express REST API istek koleksiyonu",
+    "description": "Sprint 8 - Express ve MongoDB/Mongoose REST API istek koleksiyonu",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    {
+      "key": "eventId",
+      "value": ""
+    }
+  ],
   "item": [
     {
       "name": "Health Check",
@@ -16,6 +21,20 @@
     },
     {
       "name": "Get All Events",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();",
+              "if (Array.isArray(response) && response.length > 0) {",
+              "    pm.collectionVariables.set(\"eventId\", response[0]._id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
       "request": {
         "method": "GET",
         "header": [],
@@ -27,19 +46,27 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": "http://localhost:3000/events/event-2"
+        "url": "http://localhost:3000/events/{{eventId}}"
       }
     },
     {
-      "name": "Get Non-Existing Event",
+      "name": "Get Invalid / Non-Existing Event",
       "request": {
         "method": "GET",
         "header": [],
-        "url": "http://localhost:3000/events/yok"
+        "url": "http://localhost:3000/events/gecersiz-id-123"
       }
     },
     {
-      "name": "Create Event",
+      "name": "Filter Events By Category",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/events?category=Atölye"
+      }
+    },
+    {
+      "name": "Create Event - Success",
       "request": {
         "method": "POST",
         "header": [

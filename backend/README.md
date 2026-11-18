@@ -1,14 +1,14 @@
-
 # Kampüs Etkinlikleri REST API
 
 ## Proje Hakkında
 
-Bu proje, Kampüs Etkinlikleri uygulaması için Node.js ve Express.js kullanılarak geliştirilmiş bir REST API'dir. Etkinlikleri listeleme, kategoriye göre filtreleme, ID'ye göre görüntüleme ve yeni etkinlik oluşturma işlemlerini destekler.
+Bu proje, Kampüs Etkinlikleri uygulaması için Node.js, Express.js ve MongoDB / Mongoose kullanılarak geliştirilmiş bir REST API'dir. Etkinlikleri listeleme, kategoriye göre filtreleme, ID'ye göre görüntüleme ve yeni etkinlik oluşturma işlemlerini destekler.
 
 ## Kullanılan Teknolojiler
 
 - Node.js
 - Express.js
+- MongoDB & Mongoose
 - CORS
 - dotenv
 
@@ -26,6 +26,15 @@ npm install
 
 ```env
 PORT=3000
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.example.mongodb.net/kampus?retryWrites=true&w=majority
+```
+
+## Veritabanı Tohumlama (Seed)
+
+Veritabanını 6 temel kampüs etkinliği ile doldurmak / yenilemek için:
+
+```bash
+npm run seed
 ```
 
 ## Çalıştırma
@@ -47,7 +56,7 @@ API'nin çalışır durumda olduğunu kontrol eder.
 ```json
 {
   "status": "ok",
-  "time": "2026-11-11T12:00:00.000Z",
+  "time": "2026-11-18T12:00:00.000Z",
   "student": "2311012070"
 }
 ```
@@ -64,15 +73,15 @@ GET /events
 
 ### 3. GET /events/:id
 
-Belirtilen ID'ye sahip etkinliği getirir.
+Belirtilen MongoDB ObjectId'sine sahip etkinliği getirir.
 
 Örnek istek:
 
 ```http
-GET /events/event-2
+GET /events/6afd4e416cbf5332d813b706
 ```
 
-Etkinlik bulunamazsa (404 Not Found):
+Etkinlik bulunamazsa veya geçersiz ID girilirse (404 Not Found):
 
 ```json
 {
@@ -112,7 +121,7 @@ Yeni etkinlik oluşturur.
 
 Başarılı yanıt: `201 Created`
 
-Zorunlu alanlar (`title`, `category`, `date`) eksikse:
+Zorunlu alanlar (`title`, `category`, `date`) eksikse veya validasyon hatası varsa:
 
 ```json
 {
@@ -130,12 +139,12 @@ Yanıt kodu: `400 Bad Request`
 |---|---|
 | 200 | İstek başarılı |
 | 201 | Etkinlik başarıyla oluşturuldu |
-| 400 | Zorunlu alan eksik |
-| 404 | Etkinlik bulunamadı |
+| 400 | Zorunlu alan eksik veya geçersiz veri (ValidationError / CastError) |
+| 404 | Etkinlik bulunamadı veya geçersiz ID formatı |
 
 ## Postman Koleksiyonu
 
-Altı API isteği `requests/kampus-api.json` dosyasında bulunmaktadır.
+API test istekleri `requests/kampus-api.json` dosyasında bulunmaktadır.
 
 ## Öğrenci Bilgisi
 
