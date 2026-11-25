@@ -1,67 +1,64 @@
 import mongoose from "mongoose";
-import Event from "../models/Event.js";
+import Event from "../models/event-model.js";
+import { todayStart } from "../utils/date.js";
+
+const KORUNAN_ALANLAR = ["_id", "createdAt", "updatedAt", "__v"];
+
+function notFound(res) {
+  return res.status(404).json({
+    error: {
+      message: "Event not found",
+    },
+  });
+}
 
 // GET /events
-export async function getEvents(req, res) {
+export async function getEvents(req, res, next) {
   try {
-    const { category } = req.query;
-    const filter = category ? { category } : {};
-    const events = await Event.find(filter);
-    return res.json(events);
-  } catch (error) {
-    return res.status(500).json({
-      error: {
-        message: "Etkinlikler getirilirken bir hata oluştu",
-        details: error.message,
-      },
-    });
+    const { category, search } = req.query;
+    const filter = {};
+    if (category) filter.category = category;
+    if (search) {
+      // Özel işaretler aramayı bozmasın
+      const guvenli = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      filter.title = { $regex: guvenli, $options: "i" };
+    }
+    const events = await Event.find(filter).sort({ date: 1 });
+    res.json(events);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// GET /events/upcoming
+export async function getUpcomingEvents(req, res, next) {
+  try {
+    const events = await Event
+      .find({ date: { $gte: todayStart() } })
+      .sort({ date: 1, time: 1 });
+    res.json(events);
+  } catch (err) {
+    next(err);
   }
 }
 
 // GET /events/:id
-export async function getEventById(req, res) {
+export async function getEventById(req, res, next) {
   try {
-    const { id } = req.params;
+    if (!mongoose.isValidObjectId(req.params.id)) return notFound(res);
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({
-        error: {
-          message: "Event not found",
-        },
-      });
-    }
+    const event = await Event.findById(req.params.id);
+    if (!event) return notFound(res);
 
-    const event = await Event.findById(id);
-
-    if (!event) {
-      return res.status(404).json({
-        error: {
-          message: "Event not found",
-        },
-      });
-    }
-
-    return res.json(event);
-  } catch (error) {
-    if (error.name === "CastError") {
-      return res.status(404).json({
-        error: {
-          message: "Event not found",
-        },
-      });
-    }
-
-    return res.status(500).json({
-      error: {
-        message: "Etkinlik getirilirken bir hata oluştu",
-        details: error.message,
-      },
-    });
+    res.json(event);
+  } catch (err) {
+    if (err.name === "CastError") return notFound(res);
+    next(err);
   }
 }
 
 // POST /events
-export async function createEvent(req, res) {
+export async function createEvent(req, res, next) {
   try {
     const {
       title,
@@ -97,7 +94,7 @@ export async function createEvent(req, res) {
     const savedEvent = await newEvent.save();
     return res.status(201).json(savedEvent);
   } catch (error) {
-    if (error.name === "ValidationError") {
+    if (error.name === "ValidationError" || error.name === "CastError") {
       return res.status(400).json({
         error: {
           message: error.message,
@@ -105,20 +102,63 @@ export async function createEvent(req, res) {
         },
       });
     }
+    next(error);
+  }
+}
 
-    if (error.name === "CastError") {
+// PATCH /events/:id
+export async function updateEvent(req, res, next) {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) return notFound(res);
+
+    const body = req.body ?? {};
+    if (Object.keys(body).length === 0) {
       return res.status(400).json({
         error: {
-          message: `Geçersiz veri formatı: ${error.path}`,
+          message: "Body is empty",
         },
       });
     }
 
-    return res.status(500).json({
-      error: {
-        message: "Etkinlik oluşturulurken bir hata oluştu",
-        details: error.message,
-      },
+    const korunan = Object.keys(body).filter((k) => KORUNAN_ALANLAR.includes(k));
+    if (korunan.length > 0) {
+      return res.status(400).json({
+        error: {
+          message: `${korunan.join(", ")} cannot be changed`,
+        },
+      });
+    }
+
+    const event = await Event.findByIdAndUpdate(req.params.id, body, {
+      returnDocument: "after",
+      runValidators: true,
     });
+
+    if (!event) return notFound(res);
+
+    res.json(event);
+  } catch (err) {
+    if (err.name === "ValidationError" || err.name === "CastError") {
+      return res.status(400).json({
+        error: {
+          message: err.message,
+        },
+      });
+    }
+    next(err);
+  }
+}
+
+// DELETE /events/:id
+export async function deleteEvent(req, res, next) {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) return notFound(res);
+
+    const event = await Event.findByIdAndDelete(req.params.id);
+    if (!event) return notFound(res);
+
+    res.status(204).end();
+  } catch (err) {
+    next(err);
   }
 }

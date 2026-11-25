@@ -1,10 +1,10 @@
 import "dotenv/config";
 import mongoose from "mongoose";
 import { connectDB } from "../config/database.js";
-import Event from "../models/Event.js";
-import { events } from "../data/events.js";
+import Event from "../models/event-model.js";
+import { events } from "../data/seed-events.js";
 
-async function seed() {
+export async function runSeed() {
   try {
     console.log("MongoDB'ye bağlanılıyor...");
     await connectDB();
@@ -13,9 +13,7 @@ async function seed() {
     const deleteResult = await Event.deleteMany({});
     console.log(`Eski kayıtlar silindi (${deleteResult.deletedCount} adet).`);
 
-    const seedData = events.map(({ id, ...rest }) => rest);
-    const createdEvents = await Event.insertMany(seedData);
-
+    const createdEvents = await Event.insertMany(events);
     console.log(`Seed işlemi başarılı: Koleksiyona tam olarak ${createdEvents.length} adet etkinlik eklendi.`);
   } catch (error) {
     console.error("Seed işlemi sırasında hata oluştu:", error.message);
@@ -26,4 +24,4 @@ async function seed() {
   }
 }
 
-seed();
+runSeed();

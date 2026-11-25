@@ -2,7 +2,7 @@
 
 ## Proje Hakkında
 
-Bu proje, Kampüs Etkinlikleri uygulaması için Node.js, Express.js ve MongoDB / Mongoose kullanılarak geliştirilmiş bir REST API'dir. Etkinlikleri listeleme, kategoriye göre filtreleme, ID'ye göre görüntüleme ve yeni etkinlik oluşturma işlemlerini destekler.
+Bu proje, Kampüs Etkinlikleri uygulaması için Node.js, Express.js ve MongoDB / Mongoose kullanılarak geliştirilmiş tam CRUD özellikli bir REST API'dir (Sprint 9). Etkinlikleri listeleme, başlıkta arama (`search`), kategoriye göre filtreleme (`category`), yaklaşan etkinlikleri görüntüleme (`/upcoming`), ID'ye göre detay alma, yeni etkinlik ekleme, kısmi güncelleme (`PATCH`) ve silme (`DELETE`) işlemlerini destekler.
 
 ## Kullanılan Teknolojiler
 
@@ -11,6 +11,7 @@ Bu proje, Kampüs Etkinlikleri uygulaması için Node.js, Express.js ve MongoDB 
 - MongoDB & Mongoose
 - CORS
 - dotenv
+- Newman (Test otomasyonu)
 
 ## Kurulum
 
@@ -31,7 +32,7 @@ MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.example.mongodb.net/kam
 
 ## Veritabanı Tohumlama (Seed)
 
-Veritabanını 6 temel kampüs etkinliği ile doldurmak / yenilemek için:
+Veritabanını 2'si geçmiş, 4'ü gelecekte olmak üzere toplam 6 özgün kampüs etkinliği ile doldurmak / yenilemek için:
 
 ```bash
 npm run seed
@@ -45,106 +46,102 @@ npm run dev
 
 Sunucu varsayılan olarak `http://localhost:3000` adresinde çalışır.
 
-## API Endpointleri
+## API Sözleşmesi
+
+| Method | Endpoint | Başarılı | Hata | Açıklama |
+|---|---|---|---|---|
+| GET | `/health` | 200 | — | Sağlık kontrolü ve öğrenci numarası |
+| GET | `/events` | 200 | — | Tüm etkinlikleri listeler (tarihe göre sıralı) |
+| GET | `/events?search=&category=` | 200 | — | Başlıkta arama ve kategori filtreleme |
+| GET | `/events/upcoming` | 200 | — | Bugün ve gelecekteki etkinlikler (en yakın önce) |
+| GET | `/events/:id` | 200 | 404 | Belirtilen ID'ye sahip etkinlik |
+| POST | `/events` | 201 | 400 | Yeni etkinlik oluşturma |
+| PATCH | `/events/:id` | 200 | 400, 404 | Sadece gönderilen alanları güncelleme |
+| DELETE | `/events/:id` | 204 | 404 | Etkinliği silme (yanıt gövdesi boş) |
+
+## Tarih Formatı (GG-AA-YYYY)
+
+- API üzerinde tüm tarihler **GG-AA-YYYY** biçimindedir (Örn: `20-12-2026`).
+- MongoDB veritabanında tarihler sorgulama ve kronolojik sıralama için gerçek `Date` tipinde saklanır.
+- API yanıtlarında otomatik olarak `GG-AA-YYYY` biçimine dönüştürülerek sunulur.
+
+## API Endpoint Detayları
 
 ### 1. GET /health
-
-API'nin çalışır durumda olduğunu kontrol eder.
+API'nin çalışır durumda olduğunu ve öğrenci numarasını doğrular.
 
 Örnek yanıt (200 OK):
-
 ```json
 {
   "status": "ok",
-  "time": "2026-11-18T12:00:00.000Z",
+  "time": "2026-11-25T12:00:00.000Z",
   "student": "2311012070"
 }
 ```
 
 ### 2. GET /events
+Tüm etkinlikleri tarihe göre artan sırada listeler. `search` ve `category` query parametrelerini destekler.
 
-Tüm etkinlikleri listeler.
+- `GET /events?search=atölye` : Başlığında büyük/küçük harf duyarsız "atölye" geçenleri listeler.
+- `GET /events?category=Atölye` : Sadece "Atölye" kategorisindekileri listeler.
+- `GET /events?search=atölye&category=Atölye` : İki filtreyi birlikte uygular.
 
-Örnek istek:
+### 3. GET /events/upcoming
+Bugün ve sonrasındaki etkinlikleri artan tarih ve saat sırasıyla listeler. Geçmiş tarihli etkinlikler bu listede yer almaz.
 
-```http
-GET /events
-```
-
-### 3. GET /events/:id
-
-Belirtilen MongoDB ObjectId'sine sahip etkinliği getirir.
-
-Örnek istek:
-
-```http
-GET /events/6afd4e416cbf5332d813b706
-```
-
-Etkinlik bulunamazsa veya geçersiz ID girilirse (404 Not Found):
-
-```json
-{
-  "error": {
-    "message": "Event not found"
-  }
-}
-```
-
-### 4. GET /events?category=Seminer
-
-Belirtilen kategoriye ait etkinlikleri listeler.
-
-Örnek istek:
-
-```http
-GET /events?category=Seminer
-```
+### 4. GET /events/:id
+Belirtilen MongoDB ObjectId'sine sahip etkinliği döner. Geçersiz ID formatında veya kayıt bulunamadığında `404 Not Found` döner.
 
 ### 5. POST /events
+Yeni etkinlik oluşturur. `title`, `category`, `date` zorunludur. `capacity` en az 1 olmalıdır.
 
-Yeni etkinlik oluşturur.
-
-Örnek istek gövdesi:
-
+Örnek İstek:
 ```json
 {
   "title": "Yeni Etkinlik",
   "category": "Atölye",
-  "date": "2026-12-01",
+  "date": "20-12-2026",
   "capacity": 30,
   "time": "14:00",
   "location": "Bilgisayar Laboratuvarı",
   "description": "Örnek etkinlik açıklaması."
 }
 ```
+Başarılı Yanıt: `201 Created`
 
-Başarılı yanıt: `201 Created`
+### 6. PATCH /events/:id
+Etkinliğin sadece gönderilen alanlarını günceller.
+- Boş gövde (`{}`) gönderilirse `400 Bad Request` (`Body is empty`) döner.
+- `_id`, `createdAt`, `updatedAt`, `__v` korunan alanları gönderilirse `400 Bad Request` döner.
+- Schema validasyon kuralları güncellemede de geçerlidir (`runValidators: true`).
+- Güncellenmiş kaydı döner (`returnDocument: "after"`).
 
-Zorunlu alanlar (`title`, `category`, `date`) eksikse veya validasyon hatası varsa:
+### 7. DELETE /events/:id
+Belirtilen etkinliği veritabanından siler.
+- Başarılı silme işleminde `204 No Content` döner ve yanıt gövdesi boştur.
+- Olmayan veya silinmiş ID için `404 Not Found` döner.
+
+## Hata Formatı
+
+Tüm hata yanıtları standart formatta döner:
 
 ```json
 {
   "error": {
-    "message": "title, category and date are required"
+    "message": "Hata açıklaması"
   }
 }
 ```
 
-Yanıt kodu: `400 Bad Request`
+## Newman Testi
 
-## Hata Kodları
+Projenin testleri Postman / Newman ile çalıştırılabilir:
 
-| HTTP Kodu | Açıklama |
-|---|---|
-| 200 | İstek başarılı |
-| 201 | Etkinlik başarıyla oluşturuldu |
-| 400 | Zorunlu alan eksik veya geçersiz veri (ValidationError / CastError) |
-| 404 | Etkinlik bulunamadı veya geçersiz ID formatı |
+```bash
+newman run https://webdersi.vercel.app/test.json
+```
 
-## Postman Koleksiyonu
-
-API test istekleri `requests/kampus-api.json` dosyasında bulunmaktadır.
+Toplam 18 istek ve 45 test assertions içermektedir. Test sonuçları `backend/requests/run-results.json` dosyasında tutulmaktadır.
 
 ## Öğrenci Bilgisi
 
